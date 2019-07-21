@@ -23,7 +23,8 @@ class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
         val result = loginRepository.login(username, password)
 
         if (result is Result.Success) {
-            _loginResult.value = LoginResult(success = LoggedInUserView(result.data.displayName, loginRepository.dataSource.isAdmin(username, password)))
+            _loginResult.value = LoginResult(success = LoggedInUserView(result.data.displayName,
+                    loginRepository.dataSource.isAdmin(username, password), loginRepository.dataSource.getUser(username)))
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
         }
@@ -57,7 +58,11 @@ class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
         loginRepository.dataSource.removeUser(user)
     }
 
-    fun addUser(user: User){
+    fun addUser(user: User) {
         loginRepository.dataSource.addUser(user)
+    }
+
+    fun resetPassword(user: User, pass: String) {
+        loginRepository.dataSource.resetPassword(user, pass)
     }
 }

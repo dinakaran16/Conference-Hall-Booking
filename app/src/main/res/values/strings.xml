@@ -5,14 +5,21 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="welcome">"Welcome"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be > 1 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="login_failed">"User ID or password incorrect"</string>
     <string name="admin_panel">Admin Panel</string>
     <string name="tv_add_user">Add new user</string>
     <string name="ui_name">User Name</string>
     <string name="ui_password">Password</string>
     <string name="ui_add">Add</string>
     <string name="ui_incorrect_username_pass">User name or Password incorrect</string>
+    <string name="booking_details">Booking Details</string>
+    <string name="no_booking_found">No booking found</string>
+    <string name="proceed">Proceed</string>
+    <string name="new_password">New password</string>
+    <string name="new_password_confirm">Confirm password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="password_doesnt_match">Password doesn\'t match</string>
 </resources>

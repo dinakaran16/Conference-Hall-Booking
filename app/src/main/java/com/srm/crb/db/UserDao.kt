@@ -1,10 +1,7 @@
 package com.srm.crb.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface UserDao {
@@ -13,6 +10,9 @@ interface UserDao {
 
     @Query("SELECT * FROM user WHERE user_name LIKE :userName")
     fun getUser(userName: String): List<User>
+
+    @Update
+    fun updateUser(user: User)
 
     @Insert
     fun addUser(vararg users: User)

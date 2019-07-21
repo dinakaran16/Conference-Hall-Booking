@@ -20,11 +20,11 @@ import com.srm.crb.db.User
 
 class AdminPanel : AppCompatActivity() {
     var adapter: AdminPanelListAdapter? = null
-    private var itemDecorator: RecyclerView.ItemDecoration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.admin_panel)
+        title = resources.getString(R.string.admin_panel)
 
         val loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(AppController.instance.loginRepository))
                 .get(LoginViewModel::class.java)

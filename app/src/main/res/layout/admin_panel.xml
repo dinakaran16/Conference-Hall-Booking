@@ -6,17 +6,6 @@
     android:padding="8dp">
 
     <TextView
-        android:id="@+id/tv_admin_panel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="8dp"
-        android:text="@string/admin_panel"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
-
-    <TextView
         android:id="@+id/tv_add_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

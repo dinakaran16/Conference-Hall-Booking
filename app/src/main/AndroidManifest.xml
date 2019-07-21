@@ -20,6 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.login.AdminPanel" />
+        <activity android:name=".ui.login.BookingActivity" />
+        <activity android:name=".ui.login.ResetPasswordActivity" />
     </application>
 
 </manifest>

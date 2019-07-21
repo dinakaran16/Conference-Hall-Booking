@@ -19,7 +19,11 @@ class LoginDataSource(private val database: AppDatabase) {
             val resultArray = database.userDao().getUser(username)
             if (resultArray.isNotEmpty()) {
                 val user = resultArray.first()
-                Result.Success(LoggedInUser(user.uid.toString(), user.userName))
+                if (user.password == password) {
+                    Result.Success(LoggedInUser(user.uid, user.userName))
+                } else {
+                    Result.Error(IOException("Record not found"))
+                }
             } else {
                 Result.Error(IOException("Record not found"))
             }
@@ -44,6 +48,19 @@ class LoginDataSource(private val database: AppDatabase) {
 
     fun addUser(user: User) {
         database.userDao().addUser(user)
+    }
+
+    fun resetPassword(user: User, pass: String) {
+        val newUser = User(user.uid, user.userName, pass, false)
+        database.userDao().updateUser(newUser)
+    }
+
+    fun getUser(userName: String): User? {
+        val resultArray = database.userDao().getUser(userName)
+        if (resultArray.isNotEmpty()) {
+            return resultArray.first()
+        }
+        return null
     }
 }
 

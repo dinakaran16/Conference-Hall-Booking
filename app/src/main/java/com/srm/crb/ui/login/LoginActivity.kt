@@ -102,20 +102,33 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
-        val displayText = welcome + " " + model.displayName
-        Toast.makeText(
-                applicationContext, displayText,
-                Toast.LENGTH_LONG
-        ).show()
+        val displayText = welcome + " " + model.displayName + "!"
+        /* Toast.makeText(
+                 applicationContext, displayText,
+                 Toast.LENGTH_LONG
+         ).show()*/
 
         if (model.isAdmin) {
             val intent = Intent(this, AdminPanel::class.java)
             startActivity(intent)
+        } else {
+            if (!model.user!!.shouldResetPassword) {
+                startActivity(Intent(this, BookingActivity::class.java))
+            } else {
+                startActivity(Intent(this, ResetPasswordActivity::class.java).apply {
+                    putExtra("userName", model.user.userName)
+                })
+            }
         }
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        finish()
     }
 }
 
