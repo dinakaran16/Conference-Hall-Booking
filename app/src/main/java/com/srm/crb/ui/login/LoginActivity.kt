@@ -1,6 +1,7 @@
 package com.srm.crb.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -14,8 +15,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.room.Room
+import com.srm.crb.AppController
 
 import com.srm.crb.R
+import com.srm.crb.data.LoginDataSource
+import com.srm.crb.data.LoginRepository
+import com.srm.crb.db.AppDatabase
 
 class LoginActivity : AppCompatActivity() {
 
@@ -31,7 +37,8 @@ class LoginActivity : AppCompatActivity() {
         val login = findViewById<Button>(R.id.login)
         val loading = findViewById<ProgressBar>(R.id.loading)
 
-        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory())
+
+        loginViewModel = ViewModelProviders.of(this, LoginViewModelFactory(AppController.instance.loginRepository))
                 .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
@@ -58,10 +65,6 @@ class LoginActivity : AppCompatActivity() {
             if (loginResult.success != null) {
                 updateUiWithUser(loginResult.success)
             }
-            setResult(Activity.RESULT_OK)
-
-            //Complete and destroy login activity once successful
-            finish()
         })
 
         username.afterTextChanged {
@@ -99,13 +102,16 @@ class LoginActivity : AppCompatActivity() {
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome)
-        val displayName = model.displayName
-        // TODO : initiate successful logged in experience
+        val displayText = welcome + " " + model.displayName
         Toast.makeText(
-                applicationContext,
-                "$welcome $displayName",
+                applicationContext, displayText,
                 Toast.LENGTH_LONG
         ).show()
+
+        if (model.isAdmin) {
+            val intent = Intent(this, AdminPanel::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {

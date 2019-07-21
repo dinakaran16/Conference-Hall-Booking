@@ -8,8 +8,9 @@ import com.srm.crb.data.LoginRepository
 import com.srm.crb.data.Result
 
 import com.srm.crb.R
+import com.srm.crb.db.User
 
-class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
+class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
@@ -22,7 +23,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         val result = loginRepository.login(username, password)
 
         if (result is Result.Success) {
-            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+            _loginResult.value = LoginResult(success = LoggedInUserView(result.data.displayName, loginRepository.dataSource.isAdmin(username, password)))
         } else {
             _loginResult.value = LoginResult(error = R.string.login_failed)
         }
@@ -49,6 +50,14 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
 
     // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
-        return password.length > 5;
+        return password.isNotEmpty();
+    }
+
+    fun removeUser(user: User) {
+        loginRepository.dataSource.removeUser(user)
+    }
+
+    fun addUser(user: User){
+        loginRepository.dataSource.addUser(user)
     }
 }

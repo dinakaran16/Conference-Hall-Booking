@@ -1,25 +1,49 @@
 package com.srm.crb.data
 
+import androidx.lifecycle.LiveData
 import com.srm.crb.data.model.LoggedInUser
+import com.srm.crb.db.AppDatabase
+import com.srm.crb.db.User
 import java.io.IOException
+import java.lang.Exception
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
-class LoginDataSource {
+class LoginDataSource(private val database: AppDatabase) {
 
     fun login(username: String, password: String): Result<LoggedInUser> {
-        try {
-            // TODO: handle loggedInUser authentication
-            val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
-            return Result.Success(fakeUser)
-        } catch (e: Throwable) {
-            return Result.Error(IOException("Error logging in", e))
+        return if (isAdmin(username, password)) {
+            Result.Success(LoggedInUser("10", "Admin"))
+        } else {
+            val resultArray = database.userDao().getUser(username)
+            if (resultArray.isNotEmpty()) {
+                val user = resultArray.first()
+                Result.Success(LoggedInUser(user.uid.toString(), user.userName))
+            } else {
+                Result.Error(IOException("Record not found"))
+            }
         }
     }
 
     fun logout() {
         // TODO: revoke authentication
+    }
+
+    fun isAdmin(username: String, password: String): Boolean {
+        return "admin" == username && "admin" == password
+    }
+
+    fun getAllUsers(): LiveData<List<User>> {
+        return database.userDao().getAllUserDetails()
+    }
+
+    fun removeUser(user: User) {
+        database.userDao().remoeUser(user)
+    }
+
+    fun addUser(user: User) {
+        database.userDao().addUser(user)
     }
 }
 
